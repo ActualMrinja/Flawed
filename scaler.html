@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <title>Scaler</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" /> 
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" /> 
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <style>
+        #scaler {
+            margin: auto;
+        }
+
+    </style>
+</head>
+
+<body>
+        <canvas tabindex="1" id="scaler" width="1280" height="720" style='outline:none;' alt="Your device does not support this game">
+        </canvas>
+
+    <!-- Misc -->
+    <script type="text/javascript">
+    canvas = document.getElementById("scaler");
+    ctx = canvas.getContext("2d");
+        
+    scaleImage = new Image();
+    scaleImage.src = "svg/"+prompt("SVG")+".svg";   
+    scale = prompt("Scale");    
+           
+    function draw() {
+        
+        canvas.width = scaleImage.width * scale;    
+        canvas.height = scaleImage.height * scale;    
+        
+        
+        ctx.drawImage(scaleImage,0,0,scaleImage.width * scale,scaleImage.height * scale);
+    }
+    
+    setInterval(draw, 30);
+    </script>
+</body>
+
+</html>

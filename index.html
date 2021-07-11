@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" /> 
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" /> 
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <style>
+        body {
+            background-color: #000000;
+        }
+        
+        @font-face {
+            font-family: "Deutsch";
+            src: url("Deutsch.ttf") format("truetype");
+        }
+        
+        #container, #game {
+            margin: auto;
+            position: absolute;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 640px;
+            height: 360px;
+        }
+
+    </style>
+    
+</head>
+
+<body>
+    <div id="container"></div>
+    
+    <script src="js/pixi.js"></script>
+    <script src="js/pixi-sound.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
