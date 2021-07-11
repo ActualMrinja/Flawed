@@ -55,7 +55,7 @@ var crosshair = new Sprite();
 app.renderer.plugins.interaction.on("mousemove", positionSet => creatures.length > 0 && creatures[0].casting ? "" : crosshair.position.set(pointer.x / stage.scale.x, pointer.y / stage.scale.x));
 crosshair.focus = false;
 
-var state = "Select";
+var state = "Title";
 var level = 0;
 var time = -30;
 var enemyCount = 0;
@@ -286,7 +286,7 @@ function options(overlay = false) {
             GUI[4].texture = resources["spriteSheet"].textures["Bubble_Play.png"];
             GUI[4].scale.set(0.4, 0.4);
             GUI[4].position.set(600, 320);
-            GUI[4].on("pointerdown", changeState => levelCreate());
+            GUI[4].on("pointerdown", changeState => time >= 30 ? levelCreate() : "");
             stage.addChild(GUI[4]);
 
             //Toggles difficulty
@@ -375,8 +375,8 @@ function options(overlay = false) {
 
             GUI[7].on("pointerdown", changeState => [soundVolume = soundVolume == 1 ? 0 : 1, setVolume(), GUI[7].texture = resources["spriteSheet"].textures["Bubble_" + (soundVolume == 1 ? "Sound" : "Soundoff") + ".png"]]);
 
-            GUI[8].on("pointerdown", changeState => time >= 10 ? levelCreate() : "");
-            GUI[9].on("pointerdown", changeState => time >= 10 ? [state = "Select", options(true)] : "");
+            GUI[8].on("pointerdown", changeState => time >= 30 ? levelCreate() : "");
+            GUI[9].on("pointerdown", changeState => time >= 30 ? [state = "Select", options(true)] : "");
 
             for (let button = 0; button < 5; button++) {
                 stage.addChild(GUI[button + 5]);
@@ -403,8 +403,8 @@ function options(overlay = false) {
             GUI[8].position.set(200, 180);
             GUI[9].position.set(440, 180);
 
-            GUI[8].on("pointerdown", changeState => time >= 10 ? levelCreate() : "");
-            GUI[9].on("pointerdown", changeState => time >= 10 ? [state = "Select", options(true)] : "");
+            GUI[8].on("pointerdown", changeState => levelCreate());
+            GUI[9].on("pointerdown", changeState => [state = "Select", options(true)]);
 
             stage.addChild(GUI[8]);
             stage.addChild(GUI[9]);
@@ -423,8 +423,8 @@ function options(overlay = false) {
             GUI[8].position.set(200, 180);
             GUI[9].position.set(440, 180);
 
-            GUI[8].on("pointerdown", changeState => time >= 10 ? levelCreate() : "");
-            GUI[9].on("pointerdown", changeState => time >= 10 ? [state = "Select", options(true)] : "");
+            GUI[8].on("pointerdown", changeState => levelCreate());
+            GUI[9].on("pointerdown", changeState => [state = "Select", options(true)]);
 
             stage.addChild(GUI[8]);
             stage.addChild(GUI[9]);
@@ -699,11 +699,11 @@ function setup() {
                 GUI[10].lineStyle(time * -26, "0x000000");
                 GUI[10].drawEllipse(320, 180, 380, 380);
                 GUI[10].zIndex = 8;
-
-                if (state !== "Pause" && state !== "Play") {
-                    time += 1;
-                }
             }
+            
+           if (state !== "Pause" && state !== "Play") {
+                time += 1;
+           }
 
             //Sorts all children by Z-Index then by position
             stage.children.sort(function(a, b) {
