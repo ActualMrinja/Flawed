@@ -41,11 +41,21 @@ var soundEffects = [sound.add("Conceit", "sounds/Conceit.mp3"), sound.add("Ingra
 sound.volume = soundVolume;
 
 for (muzak in muzakList) {
-    sound.Sound.from(muzakList[muzak]).loaded = mp3Loader += 1;
+    sound.Sound.from({
+        url: muzakList[muzak].url,
+        preload: true,
+        loaded: function(err, sound) { mp3Loader += 1 } 
+    
+    });
 }
 
-for (sounds in soundEffects) {
-    sound.Sound.from(soundEffects[sounds]).loaded = mp3Loader += 1;
+for (sounds in soundEffects) { 
+    sound.Sound.from({
+        url: soundEffects[sounds].url,
+        preload: true,
+        loaded: function(err, sound) { mp3Loader += 1 } 
+    
+    });
 }
 
 var skillBubbles = [new Sprite(), new PIXI.Graphics(), new Sprite(), new PIXI.Graphics(), new Sprite(), new PIXI.Graphics(), new Sprite(), new PIXI.Graphics(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite()];
@@ -686,15 +696,12 @@ function setup() {
 
             //Waits till all mp3 files are loaded before continuing
             if (mp3Loader !== "Complete") {
-                GUI[0].x > 600 && GUI[0].scale.x > 0 ? GUI[0].scale.x *= -1 : GUI[0].x < 40 && GUI[0].scale.x < 0 ? GUI[0].scale.x *= -1 : GUI[0].x += GUI[0].scale.x > 0 ? 5 : -5;
-                
-                GUI[0].y > 320 && GUI[0].scale.y > 0 ? GUI[0].scale.y *= -1 : GUI[0].y < 40 && GUI[0].scale.y < 0 ? GUI[0].scale.y *= -1 : GUI[0].y += GUI[0].scale.y > 0 ? 5 : -5;
-    
-                
                 if (mp3Loader == muzakList.length + soundEffects.length) {
                     mp3Loader = "Complete";
                     options();
                 } else {
+                    GUI[0].x > 600 && GUI[0].scale.x > 0 ? GUI[0].scale.x *= -1 : GUI[0].x < 40 && GUI[0].scale.x < 0 ? GUI[0].scale.x *= -1 : GUI[0].x += GUI[0].scale.x > 0 ? 5 : -5;
+                    GUI[0].y > 320 && GUI[0].scale.y > 0 ? GUI[0].scale.y *= -1 : GUI[0].y < 40 && GUI[0].scale.y < 0 ? GUI[0].scale.y *= -1 : GUI[0].y += GUI[0].scale.y > 0 ? 5 : -5;
                     texts[0].text = "Loading"+(time % 60 > 40 ? "...\n" : time % 60 > 20 ? "..\n" : ".\n")+ Math.floor((mp3Loader / (muzakList.length + soundEffects.length)) * 100)+"%";
                     app.renderer.render(stage);
                
