@@ -369,7 +369,7 @@ var levels = {
         description: "Creatures have been flocking the shores in groups. You\nhave been assigned a simple task: take them down.",
         skillPoints: 1,
         texture: 2,
-        muzak: "ShoreTheme",
+        muzak: 1,
         tutorial: ["CLICK TO ATTACK!", "INCOMING!", "INCOMING!", "WATCH OUT!", "MORE?", "MORE?", ""],
         spawn: [
             ["Break"],
@@ -390,7 +390,7 @@ var levels = {
         description: "Prepare for a Naysay onslaught after a horde of Breaks\ndrop in.",
         skillPoints: 2,
         texture: 2,
-        muzak: "ShoreTheme",
+        muzak: 1,
         spawn: [
             ["Break"],
             ["Break", "Break"],
@@ -410,7 +410,7 @@ var levels = {
         description: "A new challenger has approached. Whatever you do:\ndon't let them get near the others.",
         skillPoints: 3,
         texture: 2,
-        muzak: "ShoreTheme",
+        muzak: 1,
         tutorial: ["", "", "", "", "TAKE THEM OUT!", ""],
         spawn: [
             ["Naysay"],
@@ -431,7 +431,7 @@ var levels = {
         description: "The forests have been getting all the more dangerous by\nthe passing of the hour. Keep your guard.",
         skillPoints: 3,
         texture: 3,
-        muzak: "ForestTheme",
+        muzak: 2,
         spawn: [
             ["Break"],
             ["Naysay", "Naysay", "Naysay"],
@@ -456,7 +456,7 @@ var levels = {
         description: "Another challenger has approached. Friend or foe,\nthey won't be helping for long.",
         skillPoints: 4,
         texture: 3,
-        muzak: "ForestTheme",
+        muzak: 2,
         tutorial: ["", "", "", "", "", "TAKE THEM OUT!", ""],
         spawn: [
             ["Break", "Break", "Break", "Break", "Break"],
@@ -482,7 +482,7 @@ var levels = {
         description: "A group of Haggles was spotted in a clearing in the\nforest. Wipe them out as quick as possible.",
         skillPoints: 5,
         texture: 3,
-        muzak: "ForestTheme",
+        muzak: 2,
         spawn: [
             ["Haggle"],
             ["Haggle", "Haggle"],
@@ -502,7 +502,7 @@ var levels = {
         description: "The readings say there's something in\nthe park. Something almost as powerful as you.",
         skillPoints: 3,
         texture: 4,
-        muzak: "ParkTheme",
+        muzak: 3,
         spawn: [
             ["Haggle"],
             ["Break", "Break", "Break"],
@@ -527,7 +527,7 @@ var levels = {
         description: "A horde of Breaks was circling the tunnel with that special\nreading. Clear the way for who or what is inside there.",
         skillPoints: 4,
         texture: 4,
-        muzak: "ParkTheme",
+        muzak: 3,
         spawn: [
             ["Break", "Break", "Break", "Break", "Break", "Break", "Break", "Break", "Break", "Break"],
             ["Break", "Break", "Break", "Break", "Break", "Break", "Break", "Break", "Break", "Break"],
@@ -547,7 +547,7 @@ var levels = {
         description: "The reading from the tunnel is coming straight towards\nyou. Stand your ground.",
         skillPoints: 5,
         texture: 4,
-        muzak: "ParkTheme",
+        muzak: 3,
         spawn: [
             ["Pique", "Pique", "Pique"],
             ["Haggle", "Pique", "Haggle"],
@@ -571,7 +571,7 @@ var levels = {
         name: "Mind Walls",
         description: "Protect the Mind Walls against an endless wave of fiends.\nBest Time: ",
         texture: 5,
-        muzak: "MindTheme",
+        muzak: 5,
         tutorial: ["", "", "", "AN UNFORESEEN EVENT", "", "", "", "SOLITUDE PROLONGED", "", "", "", "HOPE NO MORE", ""],
         spawn: [
             ["Break", "Break", "Break"],

@@ -30,16 +30,23 @@ var pointer = app.renderer.plugins.interaction.mouse.global;
 var background = new Sprite(stageTextures[1]);
 background.interactive = true;
 
+var mp3Loader = 0;
 var musicVolume = 0.7;
-var music = sound.Sound.from({
-    url: "muzak/ShoreTheme.mp3",
-    volume: musicVolume,
-    loop: true
-});
+var muzakList = [sound.add("Main", "muzak/MainTheme.mp3"), sound.add("Shore", "muzak/ShoreTheme.mp3"), sound.add("Forest", "muzak/ForestTheme.mp3"), sound.add("Park", "muzak/ParkTheme.mp3"), sound.add("Boss", "muzak/BossTheme.mp3"), sound.add("Mind","muzak/MindTheme.mp3"), sound.add("Win", "muzak/Win.mp3"), sound.add("Fail", "muzak/Fail.mp3")]; 
+music = sound.Sound.from("Main");
+music.volume = musicVolume;
 
 var soundVolume = 1;
 var soundEffects = [sound.add("Conceit", "sounds/Conceit.mp3"), sound.add("Ingrain_Conceit", "sounds/Ingrain_Conceit.mp3"), sound.add("Viral_Arrogance", "sounds/Viral_Arrogance.mp3"), sound.add("Undermine", "sounds/Undermine.mp3"), sound.add("Ingrain_Undermine", "sounds/Ingrain_Undermine.mp3"), sound.add("Vital_Projection", "sounds/Vital_Projection.mp3"), sound.add("Exploit", "sounds/Exploit.mp3"), sound.add("Ingrain_Exploit", "sounds/Ingrain_Exploit.mp3"), sound.add("Freeze_Manipulation", "sounds/Freeze_Manipulation.mp3"), sound.add("Gambit", "sounds/Gambit.mp3"), sound.add("Ingrain_Gambit", "sounds/Ingrain_Gambit.mp3"), sound.add("Last_Resort", "sounds/Last_Resort.mp3"), sound.add("Barrage_Gambit", "sounds/Barrage_Gambit.mp3"), sound.add("Barrage_Ingrain_Gambit", "sounds/Barrage_Ingrain_Gambit.mp3"), sound.add("Barrage_Last_Resort", "sounds/Barrage_Last_Resort.mp3"), sound.add("Snowball", "sounds/Snowball.mp3"), sound.add("Bargain", "sounds/Bargain.mp3"), sound.add("Fortify", "sounds/Fortify.mp3"), sound.add("Enrage", "sounds/Enrage.mp3"), sound.add("Freeze", "sounds/Freeze.mp3")];
 sound.volume = soundVolume;
+
+for (muzak in muzakList) {
+    sound.Sound.from(muzakList[muzak]).loaded = mp3Loader += 1;
+}
+
+for (sounds in soundEffects) {
+    sound.Sound.from(soundEffects[sounds]).loaded = mp3Loader += 1;
+}
 
 var skillBubbles = [new Sprite(), new PIXI.Graphics(), new Sprite(), new PIXI.Graphics(), new Sprite(), new PIXI.Graphics(), new Sprite(), new PIXI.Graphics(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite(), new Sprite()];
 var skillTree = [0, 0, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
@@ -55,9 +62,9 @@ var crosshair = new Sprite();
 app.renderer.plugins.interaction.on("mousemove", positionSet => creatures.length > 0 && creatures[0].casting ? "" : crosshair.position.set(pointer.x / stage.scale.x, pointer.y / stage.scale.x));
 crosshair.focus = false;
 
-var state = "Title";
+var state = "";
 var level = 0;
-var time = -30;
+var time = 0;
 var enemyCount = 0;
 
 //Basic collision 
@@ -87,8 +94,8 @@ function loadFile(url) {
 }
 
 function setVolume() {
-    for (sounds in sound) {
-        sound[sounds].volume = soundVolume;
+    for (sounds in soundEffects) {
+        sound.Sound.from(soundEffects[sounds]).volume = soundVolume;
     }
 }
 
@@ -234,6 +241,8 @@ function toggleDifficulty(toggle = false) {
 
 function options(overlay = false) {
     if (!overlay) {
+        state = "Title";
+        
         let baseButtons = [4, 5, 6, 7, 8, 9, 11, 20, 22, 23];
         GUI[4].texture = resources["spriteSheet"].textures["Bubble_Play.png"];
         GUI[5].texture = resources["spriteSheet"].textures["Bubble_" + (musicVolume == 0.7 ? "Music" : "Musicoff") + ".png"];
@@ -254,7 +263,12 @@ function options(overlay = false) {
             GUI[baseButtons[buttons]].interactive = true;
             GUI[baseButtons[buttons]].buttonMode = true;
         }
-
+        
+        GUI[0].position.set(80, 60);
+        GUI[0].scale.set(0.5, 0.5);
+        GUI[0].anchor.set(0.5);
+        GUI[0].interactive = false;
+        GUI[0].buttonMode = false;
     }
 
     switch (state) {
@@ -286,7 +300,7 @@ function options(overlay = false) {
             GUI[4].texture = resources["spriteSheet"].textures["Bubble_Play.png"];
             GUI[4].scale.set(0.4, 0.4);
             GUI[4].position.set(600, 320);
-            GUI[4].on("pointerdown", changeState => time >= 30 ? levelCreate() : "");
+            GUI[4].on("pointerdown", changeState => levelCreate());
             stage.addChild(GUI[4]);
 
             //Toggles difficulty
@@ -375,8 +389,8 @@ function options(overlay = false) {
 
             GUI[7].on("pointerdown", changeState => [soundVolume = soundVolume == 1 ? 0 : 1, setVolume(), GUI[7].texture = resources["spriteSheet"].textures["Bubble_" + (soundVolume == 1 ? "Sound" : "Soundoff") + ".png"]]);
 
-            GUI[8].on("pointerdown", changeState => time >= 30 ? levelCreate() : "");
-            GUI[9].on("pointerdown", changeState => time >= 30 ? [state = "Select", options(true)] : "");
+            GUI[8].on("pointerdown", changeState => levelCreate());
+            GUI[9].on("pointerdown", changeState => [state = "Select", options(true)]);
 
             for (let button = 0; button < 5; button++) {
                 stage.addChild(GUI[button + 5]);
@@ -411,10 +425,9 @@ function options(overlay = false) {
             stage.removeChild(GUI[4]);
 
             music.pause();
-            music = sound.Sound.from({
-                url: "muzak/Win.mp3",
-                volume: musicVolume
-            });
+            music = muzakList[6];
+            music.volume = musicVolume;
+            music.loop = false;
             music.play();
             break;
 
@@ -431,10 +444,9 @@ function options(overlay = false) {
             stage.removeChild(GUI[4]);
 
             music.pause();
-            music = sound.Sound.from({
-                url: "muzak/Fail.mp3",
-                volume: musicVolume
-            });
+            music = muzakList[7];
+            music.volume = musicVolume;
+            music.loop = false;
             music.play();
 
             //Endless mode
@@ -454,13 +466,11 @@ function resetStage() {
     background.scale.set(0.5, 0.5);
     stage.addChild(background);
 
-    if ((state == "Play" || music.url !== "muzak/" + (state == "Select" || state == "Skills" || state == "Title" ? "MainTheme" : levels[level].muzak) + ".mp3")) {
+    if (state !== "Title" && (state == "Play" || music.url !== "muzak/MainTheme.mp3")) {
         music.pause();
-        music = sound.Sound.from({
-            url: "muzak/" + (state == "Select" || state == "Skills" || state == "Title" ? "MainTheme" : levels[level].muzak) + ".mp3",
-            volume: musicVolume,
-            loop: true
-        });
+        music = muzakList[state == "Select" || state == "Skills" || state == "Title" ? 0 : levels[level].muzak];
+        music.volume = musicVolume;
+        music.loop = true;
         music.play();
     }
 
@@ -623,7 +633,7 @@ function setup() {
             });
             texts[2].position.set(520, 320);
 
-            texts[3] = new PIXI.Text("30", {
+            texts[3] = new PIXI.Text("", {
                 fontFamily: "Deutsch",
                 fontSize: 60,
                 fill: "#b8b8b8",
@@ -639,8 +649,6 @@ function setup() {
                 texts[textFit].zIndex = 7;
                 stage.addChild(texts[textFit]);
             }
-
-            options();
         }
     );
 
@@ -649,6 +657,10 @@ function setup() {
     }
 
     //Initial textures
+    background = new Sprite(stageTextures[1]);
+    background.scale.set(0.5, 0.5);
+    stage.addChild(background);
+    
     crosshair.texture = resources["spriteSheet"].textures["Crosshair_Conceit.png"];
     crosshair.scale.set(0.5, 0.5);
     crosshair.anchor.set(0.5);
@@ -659,9 +671,37 @@ function setup() {
     GUI[0].scale.set(0.5, 0.5);
     GUI[0].anchor.set(0.5);
     GUI[0].zIndex = 5;
+    GUI[0].interactive = true;
+    GUI[0].buttonMode = true;
+    GUI[0].on("pointerdown", speedUp => GUI[0].scale.set(GUI[0].scale.x *= 0.9, GUI[0].scale.y *= 0.9));
+               
+    stage.addChild(GUI[0]);
 
     ticker.add(function(delta) {
         if (texts.length > 0) {
+            //Setups time for animations
+            if (state !== "Pause" && state !== "Play") {
+                time += 1;
+            }
+
+            //Waits till all mp3 files are loaded before continuing
+            if (mp3Loader !== "Complete") {
+                GUI[0].x > 600 && GUI[0].scale.x > 0 ? GUI[0].scale.x *= -1 : GUI[0].x < 40 && GUI[0].scale.x < 0 ? GUI[0].scale.x *= -1 : GUI[0].x += GUI[0].scale.x > 0 ? 5 : -5;
+                
+                GUI[0].y > 320 && GUI[0].scale.y > 0 ? GUI[0].scale.y *= -1 : GUI[0].y < 40 && GUI[0].scale.y < 0 ? GUI[0].scale.y *= -1 : GUI[0].y += GUI[0].scale.y > 0 ? 5 : -5;
+    
+                
+                if (mp3Loader == muzakList.length + soundEffects.length) {
+                    mp3Loader = "Complete";
+                    options();
+                } else {
+                    texts[0].text = "Loading"+(time % 60 > 40 ? "...\n" : time % 60 > 20 ? "..\n" : ".\n")+ Math.floor((mp3Loader / (muzakList.length + soundEffects.length)) * 100)+"%";
+                    app.renderer.render(stage);
+               
+                }
+                
+                return; 
+            } 
 
             if (state == "Play") {
                 levelHandle();
@@ -700,11 +740,7 @@ function setup() {
                 GUI[10].drawEllipse(320, 180, 380, 380);
                 GUI[10].zIndex = 8;
             }
-            
-           if (state !== "Pause" && state !== "Play") {
-                time += 1;
-           }
-
+          
             //Sorts all children by Z-Index then by position
             stage.children.sort(function(a, b) {
                 if (a.zIndex > b.zIndex) return 1;
@@ -716,7 +752,6 @@ function setup() {
             });
 
             app.renderer.render(stage);
-
         }
     });
 }

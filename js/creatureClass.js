@@ -85,11 +85,8 @@ class creature {
 
             if (creatures[0].health > 0) {
                 music.pause();
-                music = sound.Sound.from({
-                    url: "muzak/BossTheme.mp3",
-                    volume: musicVolume,
-                    loop: true
-                });
+                music = muzakList[4];
+                music.loop = true;
                 music.play();
             }
 
